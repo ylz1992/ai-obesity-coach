@@ -2,14 +2,14 @@
 [A Longitudinal Evaluation of a Multimodal AI Assistant for Obesity, GLP-1 Therapy, and Chronic Disease Support](https://wavetulane-my.sharepoint.com/:w:/r/personal/aattia_tulane_edu/_layouts/15/Doc.aspx?sourcedoc=%7B7A767CFB-31F9-4106-A0CF-CB5A312EB333%7D&file=Longitudinal%20Evaluation%20of%20a%20Multimodal%20AI%20Assistant%20for%20Obesity.docx&wdLOR=cC94A69C8-B90E-2E45-B8FA-4A6EA4819842&fromShare=true&action=default&mobileredirect=true)
 
 ## 1. Introduction
-This document specifies the architecture, API contracts, folder layout, technology stack, and an **8‑week delivery timeline** for the multimodal AI assistant focused on obesity, GLP‑1 therapy, and chronic‑disease coaching.
+This is a demo document specifies an **8‑week delivery timeline** for the multimodal AI assistant focused on healthcare coaching.
 
 ## 2. System Overview
 ### 2.1 Client
 * Mobile web app built with the **Lynx JS SDK**  
 * Requires sign‑in before chat window is enabled  
 * Sends user messages and images to backend via HTTPS  
-* Displays streaming responses from the LLM  
+* Displays streaming responses from locally-installed LLM Server 
 
 ### 2.2 Server
 * **FastAPI** service exposing REST endpoints  
@@ -22,6 +22,9 @@ This document specifies the architecture, API contracts, folder layout, technolo
 2. Browser opens chat; sends image + text to `POST /chat`.  
 3. **Planner** decides which tasks to run (image classifier, calorie estimator, etc.).  
 4. **Backend** runs tasks; results injected into two LangChain sub‑chains  
+   * **YOLOv8** detects food objects in the image  
+   * Local **retrievers** (e.g., USDA food database) extract relevant facts  
+   * Results are sent to two separate **LangChain** sub-chains:
    * **Chain A** – bedside‑manner LLM answer  
    * **Chain B** – Retriever‑augmented factual answer  
 5. **Combiner** merges A + B and streams final response to client.  
